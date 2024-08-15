@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>First Exercise</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            height: 100vh;
+        }
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            background-color: #8b8b8b;
+            padding: 20px;
+            border: solid 1px black;
+            border-radius: 5px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+        }
+        input {
+            margin: 10px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        input[type=text]:focus {
+            background-color: rgb(226, 255, 226);
+        }
+        button {
+            padding: 5px;
+            background-color: rgb(196, 196, 196);
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: green;
+            border: solid 2px white;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="form-container">
+        <p>Please enter your first and last name:</p>
+        <form action="index.html" method="get" id="form">
+            <label for="firstname">First Name:
+                <input type="text" name="firstname" id="firstName" required/>
+            </label>
+            <label for="lastname">Last Name:
+                <input type="text" name="lastname" id="lastName" required/>
+            </label>
+            <button id="submit">Submit</button>
+        </form>
+    </section>
+
+    <script>
+        //Create array of objects with first and last names
+        
+        const userNames = [{first: "Sally", last: "Chambers"}, {first: "Toby", last: "Rogerson"}]
+        //Create constants for all element IDs for future use
+        const form = document.getElementById('form');
+        const first = document.getElementById('firstName');
+        const last = document.getElementById('lastName');
+        const submitButton = document.getElementById('submit');
+        
+        //Found on FreeCode Camp - https://forum.freecodecamp.org/t/is-an-event-listener-an-expression/457285
+        submitButton.addEventListener("click", (event) =>  {
+
+            //Prevents the index.html from refreshing
+            event.preventDefault();
+            
+            //Capture values from the first and last constant
+            const firstValue = first.value;
+            const lastValue = last.value;
+            
+            //push the first and last name object to the end of the userNames array
+            userNames.push({first: firstValue, last: lastValue});
+
+            //Show the updated array in the console
+            console.log(userNames);
+            });
+
+            //Arrow function I was trying to incorporate - From Traversy Tutorial
+            //const addNames = (a, b) => userNames.push({first: a, last: b});
+
+            //addEventListener I was attempting to incorporate - Found on MDN - https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event
+            //form.addEventListener("submit", addNames);
+        
+    </script>
+    <!-- <script src="script.js"></script> -->
+</body>
+</html>
