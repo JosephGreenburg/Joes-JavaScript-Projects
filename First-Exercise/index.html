@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>First Exercise</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
     <style>
         * {
             margin: 0;
@@ -50,9 +49,7 @@
         }
     </style>
 </head>
-
 <body>
-    
     <section class="form-container">
         <p>Please enter your first and last name:</p>
         <form action="index.html" method="get" id="form">
@@ -65,53 +62,47 @@
             <button id="submit" type="button">Submit</button>
         </form>
     </section>
-
     <script>
-        // Array of objects, objects contain key/value pairs offirst and last names
-        //const userNames = [{first: "Sally", last: "Chambers"}, {first: "Toby", last: "Rogerson"}]
-
         // Alternative array, with no objects that collect the First and Last name on one index.
         const userNames = ["Sally Chambers", "Toby Rogerson"];
         
-        //Create constants for all element IDs for future use
+        // Create constants for all element IDs for future use
         const form = document.getElementById('form');
         const first = document.getElementById('firstName');
         const last = document.getElementById('lastName');
         const submitButton = document.getElementById('submit');
         
-        //Found on FreeCode Camp - https://forum.freecodecamp.org/t/is-an-event-listener-an-expression/457285
+        // Found on FreeCode Camp - https://forum.freecodecamp.org/t/is-an-event-listener-an-expression/457285
         submitButton.addEventListener("click", (event) =>  {
                 formSubmit(event);
         });
-        //Found reference on Stack Overflow - https://stackoverflow.com/questions/68969962/keyup-event-listener-doesnt-work-properly
+
+        // Found reference on Stack Overflow - https://stackoverflow.com/questions/68969962/keyup-event-listener-doesnt-work-properly
         form.addEventListener("keyup", (event) => {
             if (event.key === "Enter") {
                 formSubmit(event); // Pass the event object
             }
         });
         
+        // Function for after the form is submitted with first and last name
         function formSubmit (event) {
-        //Prevents the index.html from refreshing
+
+        // Prevents the index.html from refreshing
         event.preventDefault();
         
-        //Capture values from the first and last constant
-        const firstValue = first.value;
-        const lastValue = last.value;
-        
-        //Object version - push the first and last name object to the end of the userNames array as an object
-        //userNames.push({first: firstValue, last: lastValue});
+        //Capture values from the input first and last name. Create a upper case letter at 0 index, lowercase the remaining string starting at index 1.
+        const firstValue = first.value[0].toUpperCase() + first.value.slice(1).toLowerCase();
+        const lastValue = last.value[0].toUpperCase() + last.value.slice(1).toLowerCase();
 
-        //Array version - push first and last name in the same element.
+        // Array version - push first and last name in the same element.
         userNames.push(`${firstValue} ${lastValue}`);
         
-        //Show the updated array in the console
+        // Show the updated array in the console
         console.log(userNames);
 
         // Reset form after submission
         form.reset();
-
         };
     </script>
-    <!-- <script src="script.js"></script> -->
 </body>
 </html>
