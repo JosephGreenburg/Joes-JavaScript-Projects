@@ -90,12 +90,17 @@
         // Prevents the index.html from refreshing
         event.preventDefault();
         
-        //Capture values from the input first and last name. Create a upper case letter at 0 index, lowercase the remaining string starting at index 1.
-        const firstValue = first.value[0].toUpperCase() + first.value.slice(1).toLowerCase();
-        const lastValue = last.value[0].toUpperCase() + last.value.slice(1).toLowerCase();
+    
+        function formatName(name, name2) {
+            // Capture values from the input first and last name. Concatonate name and name2...
+            // create a upper case letter at 0 index, lowercase the remaining string starting at index 1.
+            const formattedName = name[0].toUpperCase() + name.slice(1).toLowerCase() + ' ' + name2[0].toUpperCase() + name2.slice(1).toLowerCase();
+            // Return the formattedName
+            return formattedName;
+        }
 
-        // Array version - push first and last name in the same element.
-        userNames.push(`${firstValue} ${lastValue}`);
+        // push formatted names, from formatName function to userNames array
+        userNames.push(formatName(first.value, last.value));
         
         // Show the updated array in the console
         console.log(userNames);
