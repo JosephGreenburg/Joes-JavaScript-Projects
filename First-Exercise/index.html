@@ -62,6 +62,9 @@
             <button id="submit" type="button">Submit</button>
         </form>
     </section>
+    <section id="list-section">
+        <ul id="list-names"></ul>
+    </section>
     <script>
         // Alternative array, with no objects that collect the First and Last name on one index.
         const userNames = ["Sally Chambers", "Toby Rogerson"];
@@ -83,14 +86,13 @@
                 formSubmit(event); // Pass the event object
             }
         });
-        
+
         // Function for after the form is submitted with first and last name
         function formSubmit (event) {
 
         // Prevents the index.html from refreshing
         event.preventDefault();
-        
-    
+
         function formatName(name, name2) {
             // Capture values from the input first and last name. Concatonate name and name2...
             // create a upper case letter at 0 index, lowercase the remaining string starting at index 1.
@@ -99,15 +101,26 @@
             return formattedName;
         }
 
-        // push formatted names, from formatName function to userNames array
-        userNames.push(formatName(first.value, last.value));
-        
-        // Show the updated array in the console
-        console.log(userNames);
+        const newPeopleArray = userNames.map(userName => userName);
+        const updatedPeopleArray = [...newPeopleArray, formatName(first.value, last.value)];
 
+        updatedPeopleArray.sort();
+        createNameList(updatedPeopleArray);
         // Reset form after submission
         form.reset();
         };
+
+        function createNameList(arr) {
+            const ul = document.getElementById('list-names');
+            //ul.innerHTML = '';
+
+            arr.forEach((element) => {
+                const li = document.createElement('li');
+                li.textContent = element;
+                ul.appendChild(li);    
+            })
+            
+        }
     </script>
 </body>
 </html>
