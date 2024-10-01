@@ -38,14 +38,41 @@
         input[type=text]:focus {
             background-color: rgb(226, 255, 226);
         }
-        button {
+        .submit-button {
             padding: 5px;
             background-color: rgb(196, 196, 196);
             border-radius: 5px;
         }
-        button:hover {
+        .submit-button:hover {
             background-color: green;
             border: solid 2px white;
+        }
+        .list-container {
+            display: flex;
+            margin-top: 10px;
+            flex-direction: column;
+            justify-content: space-evenly;
+            background-color: lightgray;
+            width: 600px;
+            height: auto;
+        }
+        .list-item {
+            background-color: white;
+            border-radius: 5px;
+        }
+        .delete-button {
+                background-color:#F24701;
+                padding: 1px 1px;
+                color:#fff;
+                text-align:center;
+                margin-left: 5px;
+        }
+        .delete-button:hover {
+            background-color: #f2a601;
+        }
+        .user-list {
+            margin-top: 15px;
+            font-weight: 800;
         }
     </style>
 </head>
@@ -59,67 +86,117 @@
             <label for="lastname">Last Name:
                 <input type="text" name="lastname" id="lastName" required/>
             </label>
-            <button id="submit" type="button">Submit</button>
+            <button class="submit-button" id="submit" type="button">Submit</button>
         </form>
     </section>
-    <section id="list-section">
-        <ul id="list-names"></ul>
+    <p class="user-list">User List:</p>
+    <section class="list-container"id="list-section">
+        <ul class="list-section" id="list-names"><p>User List:</p></ul>
     </section>
+    <!-- <ul class="list-section" id="list-names">
+        <li class="list-item" id="user">Test<button class="delete-button" id="delete-button">Delete</button></li>
+    </ul> -->
     <script>
         // Alternative array, with no objects that collect the First and Last name on one index.
-        const userNames = ["Sally Chambers", "Toby Rogerson"];
-        
+        //const userNames = ["Sally Chambers", "Toby Rogerson"];
+
         // Create constants for all element IDs for future use
+        const totalNames = [];
         const form = document.getElementById('form');
         const first = document.getElementById('firstName');
         const last = document.getElementById('lastName');
         const submitButton = document.getElementById('submit');
-        
-        // Found on FreeCode Camp - https://forum.freecodecamp.org/t/is-an-event-listener-an-expression/457285
-        submitButton.addEventListener("click", (event) =>  {
-                formSubmit(event);
-        });
+        const ul = document.getElementById('list-names');
 
-        // Found reference on Stack Overflow - https://stackoverflow.com/questions/68969962/keyup-event-listener-doesnt-work-properly
+        //Submit methods
+        submitButton.addEventListener("click", (event) =>  {
+                alert('submit click');
+                event.preventDefault();
+                addNewNameToArray();
+        });
         form.addEventListener("keyup", (event) => {
             if (event.key === "Enter") {
-                formSubmit(event); // Pass the event object
+                alert('submit enter');
+                event.preventDefault();
+                addNewNameToArray(); // Pass the event object
             }
         });
 
-        // Function for after the form is submitted with first and last name
-        function formSubmit (event) {
-
-        // Prevents the index.html from refreshing
-        event.preventDefault();
-
+        //Capitalize first letter, lowercase remaining
         function formatName(name, name2) {
-            // Capture values from the input first and last name. Concatonate name and name2...
-            // create a upper case letter at 0 index, lowercase the remaining string starting at index 1.
-            const formattedName = name[0].toUpperCase() + name.slice(1).toLowerCase() + ' ' + name2[0].toUpperCase() + name2.slice(1).toLowerCase();
-            // Return the formattedName
-            return formattedName;
+            alert('formatted name');
+            return name[0].toUpperCase() + name.slice(1).toLowerCase() + ' ' + name2[0].toUpperCase() + name2.slice(1).toLowerCase();
         }
 
-        const newPeopleArray = userNames.map(userName => userName);
-        const updatedPeopleArray = [...newPeopleArray, formatName(first.value, last.value)];
-
-        updatedPeopleArray.sort();
-        createNameList(updatedPeopleArray);
-        // Reset form after submission
-        form.reset();
-        };
-
+        //First and Lastname submission
+        function nameSubmit(name1, name2) {
+            alert('return submitted name');
+            if(name1 && name2) {
+                return formatName(name1, name2);
+            } else {
+                return alert('Please enter your first and last name');
+            }
+        }
+        //Store names in localStorage
+        function storeSubmittedNames (arr) {
+            localStorage.setItem("userNames", JSON.stringify(arr));
+        }
+        //Add New Names to the array, reset the form after submission, store names in local storage, call create names for the list on page
+        function addNewNameToArray() {
+            alert('Adding name to array');
+            totalNames.push(nameSubmit(first.value, last.value));
+            totalNames.sort();
+            console.log(totalNames);
+            form.reset();
+            storeSubmittedNames(totalNames);
+            createNameList(totalNames);
+        }
+        
+        //Create the list elements with all names in the array
+        /**
+        * Review and fix - Even if names are not added, this will run and create a floating delete button.  
+        */
         function createNameList(arr) {
-            const ul = document.getElementById('list-names');
-            //ul.innerHTML = '';
-
-            arr.forEach((element) => {
+            ul.innerHTML = '';
+            // Use map to map all the values from totalNames to list elements.
+            arr.map((element) => {
+                // Create <li> with attributes
                 const li = document.createElement('li');
                 li.textContent = element;
+                li.className = 'list-item';
+                // Create <button> with attributes
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = "Delete";
+                deleteButton.className = 'delete-button';
+
+                deleteButton.addEventListener('click', () => {
+                    removeSubmittedNames(li);
+                    li.remove();
+                });
+
+                // Append both to the DOM
+                li.appendChild(deleteButton);
                 ul.appendChild(li);    
-            })
-            
+            });
+        }
+
+        //Remove the <li> and the local storage of the name where the delete button was clicked. 
+        /**
+        *   Review and fix - 
+        */
+        function removeSubmittedNames(li, deleteButton) {
+            alert('remove submitted names called');
+
+            const userNames = JSON.parse(localStorage.getItem('userNames'));
+            if(userNames.length > 0) {
+                alert('userNames Exists');
+                console.log(li.textContent);
+                updatedUserNames = userNames.filter(user => user !== li.textContent);
+                localStorage.setItem('userNames', updatedUserNames);
+                alert(`User name deleted from storage: ${updatedUserNames}`);
+            } else {
+                alert('userNames does not exist');
+            }
         }
     </script>
 </body>
